@@ -1,45 +1,10 @@
 # frozen_string_literal: true
 
-class Prefecture
-  attr_reader :code, :name, :name_kana, :name_romaji
-  attr_accessor :cities
-
-  def initialize(code:, name:, name_kana:, name_romaji:)
-    @code = code
-    @name = name
-    @name_kana = name_kana
-    @name_romaji = name_romaji
-    @cities = []
-  end
-end
-
-class City
-  attr_reader :code, :name, :name_kana, :name_romaji
-  attr_accessor :towns
-
-  def initialize(code:, name:, name_kana:, name_romaji:)
-    @code = code
-    @name = name
-    @name_kana = name_kana
-    @name_romaji = name_romaji
-    @towns = []
-  end
-end
-
-class Town
-  attr_reader :name, :name_kana, :name_romaji, :nickname, :latitude, :longitude
-
-  def initialize(name:, name_kana:, name_romaji:, nickname:, latitude:, longitude:)
-    @name = name
-    @name_kana = name_kana
-    @name_romaji = name_romaji
-    @nickname = nickname
-    @latitude = latitude
-    @longitude = longitude
-  end
-end
-
 require 'csv'
+
+require './prefecture'
+require './city'
+require './town'
 
 HEADER_MAP = {
   "都道府県コード" => :prefecture_code, "都道府県名" => :prefecture_name, "都道府県名カナ" => :prefecture_name_kana,
