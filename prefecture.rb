@@ -11,4 +11,8 @@ class Prefecture
     @name_romaji = name_romaji
     @cities = []
   end
+
+  def formatted_code
+    format("%02<number>d", number: code)
+  end
 end

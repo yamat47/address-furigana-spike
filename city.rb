@@ -11,4 +11,8 @@ class City
     @name_romaji = name_romaji
     @towns = []
   end
+
+  def formatted_code
+    code.nil? ? 'UNKNOWN' : format("%05<number>d", number: code)
+  end
 end

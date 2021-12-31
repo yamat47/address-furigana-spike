@@ -49,14 +49,16 @@ data.each do |row|
   end
 end
 
+CSV.open("parsed_data/prefectures.csv", "w") do |csv|
+  csv << %w(code name name_kana name_romaji)
+  prefectures.each { |prefecture| csv << [prefecture.formatted_code, prefecture.name, prefecture.name_kana, prefecture.name_romaji] }
+end
+
 prefectures.each do |prefecture|
   prefecture.cities.each do |city|
-    CSV.open("parsed_data/#{prefecture.code}-#{city.code}.csv", 'w') do |csv|
+    CSV.open("parsed_data/#{prefecture.formatted_code}-#{city.formatted_code}.csv", 'w') do |csv|
       csv << %w[name name_kana name_romaji nickname latitude longitude]
-
-      city.towns.each do |town|
-        csv << [town.name, town.name_kana, town.name_romaji, town.nickname, town.latitude, town.longitude]
-      end
+      city.towns.each { |town| csv << [town.name, town.name_kana, town.name_romaji, town.nickname, town.latitude, town.longitude] }
     end
   end
 end
