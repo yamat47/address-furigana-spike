@@ -6,7 +6,6 @@ require './city'
 
 class Prefecture
   attr_reader :code, :name, :name_kana, :name_romaji
-  attr_accessor :cities
 
   class << self
     def all
@@ -26,7 +25,6 @@ class Prefecture
     @name = name
     @name_kana = name_kana
     @name_romaji = name_romaji
-    @cities = []
   end
 
   def formatted_code

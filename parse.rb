@@ -17,53 +17,53 @@ HEADER_MAP = {
 # data = CSV.table('./data/sample.csv', header_converters: proc { |h| HEADER_MAP[h] })
 data = CSV.table('./data/japanese-addresses.csv', header_converters: proc { |h| HEADER_MAP[h] })
 
-prefectures = []
+prefectures = {}
 
 data.each do |row|
-  prefecture = prefectures.detect { |prefecture| prefecture.code == row[:prefecture_code] }
+  prefecture = prefectures.keys.detect { |prefecture| prefecture.code == row[:prefecture_code] }
 
   if prefecture.nil?
     prefecture = Prefecture.new(code: row[:prefecture_code], name: row[:prefecture_name],
                                 name_kana: row[:prefecture_name_kana], name_romaji: row[:prefecture_romaji])
 
-    prefectures << prefecture
+    prefectures[prefecture] = {}
   end
 
-  city = prefecture.cities.detect { |city| city.code == row[:city_code] }
+  city = prefectures[prefecture].keys.detect { |city| city.code == row[:city_code] }
 
   if city.nil?
     city = City.new(code: row[:city_code], name: row[:city_name],
                     name_kana: row[:city_name_kana], name_romaji: row[:city_romaji])
 
-    prefecture.cities << city
+    prefectures[prefecture][city] = []
   end
 
-  town = city.towns.detect { |town| town.name == row[:town_name] }
+  town = prefectures[prefecture][city].detect { |town| town.name == row[:town_name] }
 
   if town.nil?
     town = Town.new(name: row[:town_name], name_kana: row[:town_name_kana],
                     name_romaji: row[:town_name_romaji], nickname: row[:town_nickname],
                     latitude: row[:latitude], longitude: row[:longitude])
 
-    city.towns << town
+    prefectures[prefecture][city] << town
   end
 end
 
 CSV.open("parsed_data/prefectures.csv", "w") do |csv|
   csv << %w(code name name_kana name_romaji)
-  prefectures.each { |prefecture| csv << [prefecture.formatted_code, prefecture.name, prefecture.name_kana, prefecture.name_romaji] }
+  prefectures.each_key { |prefecture| csv << [prefecture.formatted_code, prefecture.name, prefecture.name_kana, prefecture.name_romaji] }
 end
 
-prefectures.each do |prefecture|
+prefectures.each do |prefecture, cities|
   CSV.open("parsed_data/#{prefecture.formatted_code}.csv", "w") do |csv|
     csv << %w(code name name_kana name_romaji)
-    prefecture.cities.each { |city| csv << [city.formatted_code, city.name, city.name_kana, city.name_romaji] }
+    cities.each_key { |city| csv << [city.formatted_code, city.name, city.name_kana, city.name_romaji] }
   end
 
-  prefecture.cities.each do |city|
+  cities.each do |city, towns|
     CSV.open("parsed_data/#{prefecture.formatted_code}-#{city.formatted_code}.csv", 'w') do |csv|
       csv << %w[name name_kana name_romaji nickname latitude longitude]
-      city.towns.each { |town| csv << [town.name, town.name_kana, town.name_romaji, town.nickname, town.latitude, town.longitude] }
+      towns.each { |town| csv << [town.name, town.name_kana, town.name_romaji, town.nickname, town.latitude, town.longitude] }
     end
   end
 end
