@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+require 'csv'
+
+require './town'
+
 class City
   attr_reader :code, :prefecture_code, :name, :name_kana, :name_romaji
 
@@ -17,5 +21,18 @@ class City
 
   def prefecture
     Prefecture.all.detect { |prefecture| prefecture.formatted_code == prefecture_code }
+  end
+
+  def towns
+    CSV.table("./parsed_data/#{prefecture_code}-#{formatted_code}.csv").map do |town|
+      Town.new(
+        name: town[:name],
+        name_kana: town[:name_kana],
+        name_romaji: town[:name_romaji],
+        nickname: town[:nickname],
+        latitude: town[:latitude],
+        longitude: town[:longitude]
+      )
+    end
   end
 end
