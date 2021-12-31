@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'csv'
+
 def find_prefecture(address:)
   Struct.new(:name).new('北海道')
 end
@@ -11,7 +13,6 @@ def find_city(prefecture:, address:)
   Struct.new(:name).new('札幌市中央区')
 end
 
-require 'csv'
 
 HEADER_MAP = {
   "都道府県コード" => :prefecture_code, "都道府県名" => :prefecture_name, "都道府県名カナ" => :prefecture_name_kana,
