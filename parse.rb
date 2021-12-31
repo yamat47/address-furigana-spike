@@ -56,8 +56,8 @@ end
 
 prefectures.each do |prefecture, cities|
   CSV.open("parsed_data/#{prefecture.formatted_code}.csv", "w") do |csv|
-    csv << %w(code name name_kana name_romaji)
-    cities.each_key { |city| csv << [city.formatted_code, city.name, city.name_kana, city.name_romaji] }
+    csv << %w(code prefecture_code name name_kana name_romaji)
+    cities.each_key { |city| csv << [city.formatted_code, prefecture.formatted_code, city.name, city.name_kana, city.name_romaji] }
   end
 
   cities.each do |city, towns|

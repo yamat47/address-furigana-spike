@@ -35,6 +35,7 @@ class Prefecture
     CSV.table("./parsed_data/#{formatted_code}.csv").map do |city|
       City.new(
         code: city[:code],
+        prefecture_code: city[:prefecture_code],
         name: city[:name],
         name_kana: city[:name_kana],
         name_romaji: city[:name_romaji]
