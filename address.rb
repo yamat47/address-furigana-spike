@@ -18,6 +18,10 @@ class Address
     @town = @city.towns.detect { |town| town_and_after_candidates(town_and_after).any? { |name| name.start_with?(town.name) } }
   end
 
+  def furigana
+    "#{prefecture.name_kana}#{city.name_kana}#{town.name_kana}"
+  end
+
   private
     def number_hash
       { 1 => '一', 2 => '二', 3 => '三', 4 => '四', 5 => '五', 6 => '六', 7 => '七', 8 => '八', 9 => '九' }
