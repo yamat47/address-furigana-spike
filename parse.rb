@@ -32,8 +32,8 @@ data.each do |row|
   city = prefectures[prefecture].keys.detect { |city| city.code == row[:city_code] }
 
   if city.nil?
-    city = City.new(code: row[:city_code], name: row[:city_name],
-                    name_kana: row[:city_name_kana], name_romaji: row[:city_romaji])
+    city = City.new(code: row[:city_code], prefecture_code: prefecture.code,
+                    name: row[:city_name], name_kana: row[:city_name_kana], name_romaji: row[:city_romaji])
 
     prefectures[prefecture][city] = []
   end
